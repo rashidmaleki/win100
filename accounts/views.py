@@ -3,10 +3,13 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from accounts.serializers import UserSerializer, PlanSerializer
 from rest_framework import generics
-from accounts.models import Plan
-from rest_framework.permissions import IsAuthenticated
+from accounts.models import Plan, Profile
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import status
+from rest_framework.response import Response
 
 User = get_user_model()
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -15,6 +18,12 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class UserList(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserSerializer
 
 
 class PlanViewSet(generics.ListAPIView):

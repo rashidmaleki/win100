@@ -1,6 +1,9 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+import random
 
 
 class UserManager(BaseUserManager):
@@ -50,14 +53,15 @@ class User(AbstractUser):
 
 
 class Payment(models.Model):
-    user = models.ForeignKey(User, verbose_name=_("کاربر"), on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name=_(
+        "کاربر"), on_delete=models.CASCADE)
     txid = models.CharField(verbose_name='کد تراکنش', max_length=100)
     payment_status = models.BooleanField(verbose_name='وضعیت پرداخت')
     created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت')
-    
+
     def __str__(self) -> str:
         return self.txid
-    
+
     class Meta:
         verbose_name_plural = "پرداخت ها"
         verbose_name = "پرداخت"
@@ -66,7 +70,8 @@ class Payment(models.Model):
 class Plan(models.Model):
     name = models.CharField(max_length=50, verbose_name='نام پکیج')
     price = models.IntegerField(verbose_name='قیمت')
-    daily_credit = models.IntegerField(default=0, verbose_name='مدت زمان اعتبار')
+    daily_credit = models.IntegerField(
+        default=0, verbose_name='مدت زمان اعتبار')
 
     def __str__(self) -> str:
         return self.name
@@ -77,11 +82,33 @@ class Plan(models.Model):
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey(User, verbose_name=_("کاربر"), on_delete=models.CASCADE)
-    plan = models.ForeignKey(Plan, verbose_name=_("پکیج"), on_delete=models.CASCADE)
-    payment = models.ForeignKey(Payment, verbose_name=_("تراکنش"), on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name=_(
+        "کاربر"), on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plan, verbose_name=_(
+        "پکیج"), on_delete=models.CASCADE)
+    payment = models.ForeignKey(Payment, verbose_name=_(
+        "تراکنش"), on_delete=models.CASCADE)
     expire_date = models.DateTimeField(verbose_name='تاریخ انقضاء')
 
     class Meta:
         verbose_name_plural = "اشتراک کاربران"
         verbose_name = "اشتراک کاربر"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        User, verbose_name="پروفایل", on_delete=models.CASCADE)
+    phone = models.CharField(max_length=11, blank=True,
+                             null=True, verbose_name='موبایل')
+    status = models.BooleanField(default=True, verbose_name='فعال')
+
+    class Meta:
+        verbose_name_plural = "پروفایل کاربران"
+        verbose_name = "پروفایل کاربر"
+
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()

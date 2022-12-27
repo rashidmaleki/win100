@@ -5,4 +5,5 @@ from accounts import views
 
 urlpatterns = [
     path('plans/', views.PlanViewSet.as_view()),
+    path('register/', views.UserList.as_view()),
 ]

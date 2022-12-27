@@ -7,10 +7,11 @@ from django.contrib.auth.models import Group
 from django.contrib.admin import DateFieldListFilter
 
 from .models import User
-from accounts.models import Payment, Transaction, Plan
+from accounts.models import Payment, Transaction, Plan, Profile
 
 
 admin.site.unregister(Group)
+
 
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
@@ -58,3 +59,8 @@ class PaymentAdmin(admin.ModelAdmin):
 @admin.register(Plan)
 class PlanAdmin(admin.ModelAdmin):
     list_display = ('name', 'price')
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone', 'status')
