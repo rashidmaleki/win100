@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib import admin
-import jdatetime
+from django.urls import reverse
 from accounts.models import Plan
 
 # Create your models here.
@@ -39,7 +39,7 @@ class Signal(models.Model):
     def __str__(self) -> str:
         return f'سیگنال شماره {self.id}'
 
-
+    
     class Meta:
         verbose_name_plural = "سیگنال ها"
         verbose_name = "سیگنال"

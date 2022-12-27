@@ -1,13 +1,16 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from signals.models import Signal
+from signals.models import Signal, Currency
 
 User = get_user_model()
 
+
+
 class SignalSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Signal
-        fields = [
+        fields = (
             'id',
             'currency',
             'price',
@@ -23,4 +26,12 @@ class SignalSerializer(serializers.ModelSerializer):
             'plan',
             'created',
             'edited',
-        ]
+        )
+        depth = 1 
+
+
+class CurrencySerializer(serializers.ModelSerializer):
+    signal_list = SignalSerializer(many=True, read_only=True)
+    class Meta:
+        model = Currency
+        fields = ('id')
