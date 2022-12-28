@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-import random
+from rest_framework.authtoken.models import Token
 
 
 class UserManager(BaseUserManager):
@@ -111,4 +111,5 @@ class Profile(models.Model):
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+        Token.objects.create(user=instance)
     instance.profile.save()
