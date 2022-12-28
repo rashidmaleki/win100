@@ -1,5 +1,4 @@
-from django.urls import include, path
-from rest_framework import routers
+from django.urls import path
 from accounts.v1 import views
 
 urlpatterns = [

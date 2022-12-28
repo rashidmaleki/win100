@@ -22,4 +22,5 @@ urlpatterns = [
     path('api-token-auth', views.obtain_auth_token),
     path('api/v1/accounts/', include('accounts.urls')),
     path('api/v1/signals/', include('signals.urls')),
+    path('api/v1/support/', include('support.urls')),
 ]
