@@ -6,17 +6,16 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.exceptions import ValidationError
-
 from .serializers import UserSerializer, RegisterSerializer
-from accounts.serializers import UserSerializer, PlanSerializer
+from accounts.v1.serializers import UserSerializer, PlanSerializer
 from accounts.models import Plan, Profile
 
 User = get_user_model()
 
-
 # Class based view to Get User Details using Token Authentication
+
+
 class UserDetailAPI(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
@@ -76,4 +75,3 @@ class LoginUserAPIView(generics.GenericAPIView):
 class PlanViewSet(generics.ListAPIView):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
-    permission_classes = [IsAuthenticated]

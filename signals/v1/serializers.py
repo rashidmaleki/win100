@@ -5,7 +5,6 @@ from signals.models import Signal, Currency
 User = get_user_model()
 
 
-
 class SignalSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -24,14 +23,8 @@ class SignalSerializer(serializers.ModelSerializer):
             'target5',
             'lever',
             'plan',
+            'status',
             'created',
             'edited',
         )
-        depth = 1 
-
-
-class CurrencySerializer(serializers.ModelSerializer):
-    signal_list = SignalSerializer(many=True, read_only=True)
-    class Meta:
-        model = Currency
-        fields = ('id')
+        depth = 1

@@ -1,12 +1,11 @@
 from django.urls import path
-from signals import views
+from signals.v1 import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
 app_name = 'signals'
 
 urlpatterns = [
-    path('get/', views.SignalViewSet.as_view()),
-    path('getByEmail/', views.SignalByEmailViewSet.as_view(), name='signal_detail'),
+    path('get/', views.UserSignalViewSet.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

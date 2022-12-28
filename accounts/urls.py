@@ -1,7 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
-from accounts import views
-from rest_framework.authtoken.views import obtain_auth_token
+from accounts.v1 import views
 
 urlpatterns = [
     path('plans/', views.PlanViewSet.as_view()),
