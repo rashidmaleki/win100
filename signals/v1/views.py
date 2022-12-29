@@ -40,3 +40,6 @@ class UserSignalViewSet(generics.ListAPIView):
 
         signal = Signal.objects.filter(plan=plan)
         return signal
+
+    def post(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
