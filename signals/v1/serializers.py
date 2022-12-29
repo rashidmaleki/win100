@@ -8,8 +8,9 @@ User = get_user_model()
 
 class SignalSerializer(serializers.ModelSerializer):
     price = serializers.IntegerField(required=False)
-    presentation_time = serializers.DateTimeField(required=False)
+    presentation_time = serializers.DateTimeField(source='get_presentation_date')
     entry_point = serializers.IntegerField(required=False)
+    created = serializers.DateTimeField(source='get_created_date')
 
     class Meta:
         model = Signal
@@ -29,7 +30,6 @@ class SignalSerializer(serializers.ModelSerializer):
             'plan',
             'status',
             'created',
-            'edited',
         )
         depth = 1
 

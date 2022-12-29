@@ -48,8 +48,11 @@ class Signal(models.Model):
     def get_plans(self):
         return ", ".join([str(p.name) for p in self.plan.all()])
 
-    def get_date(self):
-        return self.created.strftime('%a %H:%M  %d/%m/%y')
+    def get_presentation_date(self):
+        return self.presentation_time.strftime('%Y/%m/%d - %H:%M')
+
+    def get_created_date(self):
+        return self.created.strftime('%Y/%m/%d - %H:%M')
         
     def __str__(self) -> str:
         return f'سیگنال شماره {self.id}'
