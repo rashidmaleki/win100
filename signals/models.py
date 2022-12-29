@@ -48,9 +48,13 @@ class Signal(models.Model):
     def get_plans(self):
         return ", ".join([str(p.name) for p in self.plan.all()])
 
+    def get_date(self):
+        return self.created.strftime('%a %H:%M  %d/%m/%y')
+        
     def __str__(self) -> str:
         return f'سیگنال شماره {self.id}'
 
     class Meta:
         verbose_name_plural = "سیگنال ها"
         verbose_name = "سیگنال"
+        ordering = ['-created']

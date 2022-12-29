@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from support.models import Departman, Ticket
 from rest_framework.authtoken.models import Token
-from accounts.v1.functions import check_user_status
+from accounts.v1.functions import check_user_status, check_token
 
 User = get_user_model()
 
@@ -21,7 +21,7 @@ class TicketSaveSerializer(serializers.Serializer):
     text = serializers.CharField()
 
     def validate(self, attrs):
-        check_user_status(attrs['token'])
+        check_token(attrs['token'])
         return super().validate(attrs)
 
 

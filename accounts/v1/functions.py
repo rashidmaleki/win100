@@ -13,11 +13,11 @@ def check_token(token):
         return user
     except:
         raise ValidationError(
-            {
+            {'Error':{
                 'Success': False,
                 'ErrorCode': 101,
                 'ErrorMessage': 'توکن نا معتبر است',
-            }
+            }}
         )
 
 
@@ -27,29 +27,29 @@ def check_user_status(token):
 
     if not profile.status:
         raise ValidationError(
-            {
+            {'Error':{
                 'Success': False,
                 'ErrorCode': 102,
                 'ErrorMessage': 'حساب کاربری غیر فعال است',
-            }
+            }}
         )
 
     try:
         user_plan = Transaction.objects.get(user=user)
     except:
         raise ValidationError(
-            {
+            {'Error':{
                 'Success': False,
                 'ErrorCode': 103,
                 'ErrorMessage': 'کاربر اشتراک ندارد',
-            }
+            }}
         )
 
     if datetime.now() > user_plan.expire_date:
         raise ValidationError(
-            {
+            {'Error':{
                 'Success': False,
                 'ErrorCode': 104,
                 'ErrorMessage': 'اشتراک کاربر منقضی شده است',
-            }
+            }}
         )

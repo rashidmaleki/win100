@@ -33,10 +33,11 @@ class TicketSaveViewSet(generics.GenericAPIView):
                 text=request.data['text']
             )
             ticket.save()
-            return Response({
-                "Success": True,
-                "Messege": "پیغام ارسال شد"
-            })
+            return Response(
+                {'Detail': {
+                    "Success": True,
+                    "Messege": "Ticket Sent!"
+                }})
         else:
             raise ValidationError(serializer.errors)
 
