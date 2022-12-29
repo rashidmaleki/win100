@@ -7,24 +7,49 @@ from datetime import datetime
 from django.utils import timezone
 
 
-def check_user_status(token):
+def check_token(token):
     try:
         user = Token.objects.get(key=token).user
-        profile = Profile.objects.get(user=user)
+        return user
     except:
         raise ValidationError(
-            {"errors": [{"Success": False, "message": "توکن معتبر نیست"}]})
+            {
+                'Success': False,
+                'ErrorCode': 101,
+                'ErrorMessage': 'توکن نا معتبر است',
+            }
+        )
+
+
+def check_user_status(token):
+    user = check_token(token)
+    profile = Profile.objects.get(user=user)
 
     if not profile.status:
         raise ValidationError(
-            {"errors": [{"Success": False, "message": "حساب کاربری غیر فعال است"}]})
+            {
+                'Success': False,
+                'ErrorCode': 102,
+                'ErrorMessage': 'حساب کاربری غیر فعال است',
+            }
+        )
 
     try:
         user_plan = Transaction.objects.get(user=user)
     except:
         raise ValidationError(
-            {"errors": [{"Success": False, "message": "کاربر اشتراک ندارد"}]})
+            {
+                'Success': False,
+                'ErrorCode': 103,
+                'ErrorMessage': 'کاربر اشتراک ندارد',
+            }
+        )
 
     if datetime.now() > user_plan.expire_date:
         raise ValidationError(
-            {"errors": [{"Success": False, "message": "اشتراک کاربر منقضی شده است"}]})
+            {
+                'Success': False,
+                'ErrorCode': 104,
+                'ErrorMessage': 'اشتراک کاربر منقضی شده است',
+            }
+        )
