@@ -8,8 +8,12 @@ from django.utils import timezone
 
 
 def check_user_status(token):
-    user = Token.objects.get(key=token).user
-    profile = Profile.objects.get(user=user)
+    try:
+        user = Token.objects.get(key=token).user
+        profile = Profile.objects.get(user=user)
+    except:
+        raise ValidationError(
+            {"errors": [{"Success": False, "message": "توکن معتبر نیست"}]})
 
     if not profile.status:
         raise ValidationError(
@@ -21,4 +25,6 @@ def check_user_status(token):
         raise ValidationError(
             {"errors": [{"Success": False, "message": "کاربر اشتراک ندارد"}]})
 
-    print(user_plan.expire_date)
+    if datetime.now() > user_plan.expire_date:
+        raise ValidationError(
+            {"errors": [{"Success": False, "message": "اشتراک کاربر منقضی شده است"}]})

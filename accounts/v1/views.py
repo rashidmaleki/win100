@@ -75,3 +75,6 @@ class LoginUserAPIView(generics.GenericAPIView):
 class PlanViewSet(generics.ListAPIView):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

@@ -1,11 +1,15 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from signals.models import Signal, Currency
+from accounts.v1.functions import check_user_status
 
 User = get_user_model()
 
 
 class SignalSerializer(serializers.ModelSerializer):
+    price = serializers.IntegerField(required=False)
+    presentation_time = serializers.DateTimeField(required=False)
+    entry_point = serializers.IntegerField(required=False)
 
     class Meta:
         model = Signal
@@ -28,3 +32,7 @@ class SignalSerializer(serializers.ModelSerializer):
             'edited',
         )
         depth = 1
+
+    def validate(self, attrs):
+        check_user_status(attrs['token'])
+        return super().validate(attrs)
