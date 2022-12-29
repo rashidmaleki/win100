@@ -38,10 +38,13 @@ class RegisterUserAPIView(generics.CreateAPIView):
         email = response.data['email']
         user = User.objects.get(email=email)
         token = Token.objects.get(user=user)
-        data["Success"] = True
-        data["Email"] = response.data['email']
-        data['Token'] = token.key
-        return Response(data)
+        return Response(
+            {
+                'Success': True,
+                'UserId': user.pk,
+                'Email': response.data['email'],
+                'Token': token.key,
+            })
 
 
 class LoginUserAPIView(generics.GenericAPIView):
@@ -54,20 +57,32 @@ class LoginUserAPIView(generics.GenericAPIView):
             try:
                 email = request.data['email']
                 user = User.objects.get(email=email)
-            except BaseException as e:
+            except:
                 raise ValidationError(
-                    {"message": "کاربر با این آدرس ایمیل وجود ندارد"})
+                    {
+                        'Success': False,
+                        'ErrorCode': 105,
+                        'ErrorMessage': 'کاربر با این آدرس ایمیل وجود ندارد',
+                    }
+                )
 
             if not check_password(request.data['password'], user.password):
                 raise ValidationError(
-                    {"message": "پسورد اشتباه است"})
+                    {
+                        'Success': False,
+                        'ErrorCode': 106,
+                        'ErrorMessage': 'پسورد اشتباه است',
+                    }
+                )
 
             token = Token.objects.get(user=user)
-            return Response({
-                'user_id': user.pk,
-                'email': user.email,
-                'token': token.key,
-            })
+            return Response(
+                {
+                    'Success': True,
+                    'UserId': user.pk,
+                    'Email': user.email,
+                    'Token': token.key,
+                })
         else:
             raise ValidationError(serializer.errors)
 

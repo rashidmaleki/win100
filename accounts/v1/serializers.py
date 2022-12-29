@@ -34,6 +34,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
+
         fields = ('email', 'profile', 'password')
 
     def create(self, validated_data):
