@@ -5,21 +5,60 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.validators import UniqueValidator
-from accounts.models import Plan, Profile
+from accounts.models import Plan, Profile, Transaction
 
 User = get_user_model()
 
+class ProfileSerializerF(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('phone', 'status')
+
+
+class PlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plan
+        fields = ['id', 'name', 'price', 'daily_credit']
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+    plan = PlanSerializer()
+
+    class Meta:
+        model = Transaction
+        fields = ('plan', 'expire_date_time')
+
+
+class UserSerializerF(serializers.ModelSerializer):
+    profile = ProfileSerializerF()
+    package = TransactionSerializer()
+    class Meta:
+        model = User
+        fields = ('email', 'profile', 'package')
+
+
+
+
+
 
 class ProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Profile
         fields = ('phone',)
 
 
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='profile.phone')
+    class Meta:
+        model = User
+        fields = ('id','phone')
+
 class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
+    profile = UserProfileSerializer()
+    # transaction = TransactionSerializer(many=True)
 
 
 # Serializer to Register User
@@ -50,7 +89,3 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class PlanSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Plan
-        fields = ['id', 'name', 'price', 'daily_credit']

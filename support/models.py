@@ -36,6 +36,9 @@ class Ticket(models.Model):
     def __str__(self) -> str:
         return f'تیکت شماره {self.id}'
 
+    def get_created_date(self):
+        return self.created.strftime('%Y/%m/%d - %H:%M')
+
     class Meta:
         verbose_name_plural = "تیکت ها"
         verbose_name = "تیکت"

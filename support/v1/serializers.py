@@ -26,6 +26,8 @@ class TicketSaveSerializer(serializers.Serializer):
 
 
 class UserTicketsSerialiyer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(source='get_created_date')
+
     class Meta:
         model = Ticket
         fields = '__all__'

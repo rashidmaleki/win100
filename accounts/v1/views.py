@@ -8,9 +8,10 @@ from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from .serializers import UserSerializer, RegisterSerializer
-from accounts.v1.serializers import UserSerializer, PlanSerializer
+from accounts.v1.serializers import UserSerializer, PlanSerializer, ProfileSerializerF, UserSerializerF
 from accounts.models import Plan, Profile
-
+from django.shortcuts import get_object_or_404
+from accounts.v1.functions import check_token
 User = get_user_model()
 
 # Class based view to Get User Details using Token Authentication
@@ -93,3 +94,11 @@ class PlanViewSet(generics.ListAPIView):
 
     def post(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class UserProfileViewSet(APIView):
+    def post(self, request):
+        token = request.data['token']
+        user = check_token(token)
+        serializer = UserSerializerF(user)
+        return Response(serializer.data)

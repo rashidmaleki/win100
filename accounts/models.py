@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
 
 
 class UserManager(BaseUserManager):
@@ -76,28 +77,33 @@ class Plan(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    
     class Meta:
         verbose_name_plural = "پکیج ها"
         verbose_name = "پکیج"
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey(User, verbose_name=_(
-        "کاربر"), on_delete=models.CASCADE)
+    user = models.OneToOneField(User, verbose_name=_(
+        "کاربر"), on_delete=models.CASCADE, related_name='package')
     plan = models.ForeignKey(Plan, verbose_name=_(
-        "پکیج"), on_delete=models.CASCADE)
+        "پکیج"), on_delete=models.CASCADE, related_name='plan')
     payment = models.ForeignKey(Payment, verbose_name=_(
         "تراکنش"), on_delete=models.CASCADE)
     expire_date = models.DateTimeField(verbose_name='تاریخ انقضاء')
 
+    def expire_date_time(self):
+        return self.expire_date.strftime('%Y/%m/%d - %H:%M')
+ 
     class Meta:
         verbose_name_plural = "اشتراک کاربران"
         verbose_name = "اشتراک کاربر"
+    
 
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        User, verbose_name="پروفایل", on_delete=models.CASCADE)
+        User, verbose_name="پروفایل", on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length=11, blank=True,
                              null=True, verbose_name='موبایل')
     status = models.BooleanField(default=True, verbose_name='فعال')
