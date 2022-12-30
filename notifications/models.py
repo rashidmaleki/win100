@@ -11,10 +11,14 @@ class Notification(models.Model):
     def __str__(self) -> str:
         return self.subject
 
+    def get_created_date(self):
+        return self.created.strftime('%Y/%m/%d - %H:%M')
 
     class Meta:
         verbose_name_plural = "اطلاعیه ها"
         verbose_name = "اطلاعیه"
+        ordering = ['-created']
+
 
 
 class Faq(models.Model):
@@ -22,6 +26,10 @@ class Faq(models.Model):
     answer = models.TextField(verbose_name='جواب')
     created = models.DateTimeField(auto_now_add=True)
     
+    def get_created_date(self):
+        return self.created.strftime('%Y/%m/%d - %H:%M')
+    
     class Meta:
         verbose_name_plural = "سوالات متداول"
         verbose_name = "سوال"
+        ordering = ['-created']
