@@ -5,7 +5,7 @@ from support.models import Departman, Ticket
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from accounts.v1.functions import check_user_status
+from accounts.v1.functions import check_user_status, check_token
 # Create your views here.
 
 
@@ -46,9 +46,7 @@ class UserTicketsViewSet(generics.ListAPIView):
     serializer_class = UserTicketsSerialiyer
 
     def get_queryset(self):
-        check_user_status(self.request.data['token'])
-        token = self.request.data['token']
-        user = Token.objects.get(key=token).user
+        user = check_token(self.request.data['token'])
         query = Ticket.objects.filter(user=user)
         return query
 
