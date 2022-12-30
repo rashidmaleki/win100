@@ -57,7 +57,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
-    profile = UserProfileSerializer()
+    # profile = UserProfileSerializer()
     # transaction = TransactionSerializer(many=True)
 
 
@@ -83,7 +83,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         if 'profile' in validated_data:
-            profile = Profile.objects.get(user=user)
+            profile, created = Profile.objects.get_or_create(user=user)
             profile.phone = validated_data['profile']['phone']
             profile.save()
         return user

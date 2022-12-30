@@ -76,7 +76,7 @@ class LoginUserAPIView(generics.GenericAPIView):
                     }
                 )
 
-            token = Token.objects.get(user=user)
+            token, created = Token.objects.get_or_create(user=user)
             return Response(
                 {
                     'Success': True,
