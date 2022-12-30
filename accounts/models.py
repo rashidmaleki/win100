@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-
+from datetime import datetime
 
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
@@ -94,6 +94,12 @@ class Transaction(models.Model):
 
     def expire_date_time(self):
         return self.expire_date.strftime('%Y/%m/%d - %H:%M')
+
+    def has_packege(self):
+        if datetime.now() < self.expire_date:
+            return True
+        else:
+            return False
  
     class Meta:
         verbose_name_plural = "اشتراک کاربران"

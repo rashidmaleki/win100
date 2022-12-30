@@ -26,7 +26,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ('plan', 'expire_date_time')
+        fields = ('plan', 'expire_date_time', 'has_packege')
 
 
 class UserSerializerF(serializers.ModelSerializer):
