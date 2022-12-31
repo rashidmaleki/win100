@@ -9,6 +9,7 @@ from accounts.models import Plan, Profile, Transaction
 
 User = get_user_model()
 
+
 class ProfileSerializerF(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -32,13 +33,10 @@ class TransactionSerializer(serializers.ModelSerializer):
 class UserSerializerF(serializers.ModelSerializer):
     profile = ProfileSerializerF()
     package = TransactionSerializer()
+
     class Meta:
         model = User
         fields = ('email', 'profile', 'package')
-
-
-
-
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -47,12 +45,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('phone',)
 
 
-
 class UserProfileSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='profile.phone')
+
     class Meta:
         model = User
-        fields = ('id','phone')
+        fields = ('id', 'phone')
+
 
 class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
@@ -89,3 +88,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
+class CheckTransferSerializer(serializers.Serializer):
+    token = serializers.CharField(required=True)
+    txid = serializers.CharField(required=True)
+    plan = serializers.CharField(required=True)

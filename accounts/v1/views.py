@@ -7,11 +7,14 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
-from .serializers import UserSerializer, RegisterSerializer
+from .serializers import UserSerializer, RegisterSerializer, CheckTransferSerializer
 from accounts.v1.serializers import UserSerializer, PlanSerializer, ProfileSerializerF, UserSerializerF
 from accounts.models import Plan, Profile
 from django.shortcuts import get_object_or_404
-from accounts.v1.functions import check_token
+from rest_framework import status
+
+from accounts.v1.functions import check_token, check_transfer
+
 User = get_user_model()
 
 # Class based view to Get User Details using Token Authentication
@@ -102,3 +105,20 @@ class UserProfileViewSet(APIView):
         user = check_token(token)
         serializer = UserSerializerF(user)
         return Response(serializer.data)
+
+
+class CheckTransferViewSet(APIView):
+
+    def post(self, request, format=None):
+        serializer = CheckTransferSerializer(data=request.data)
+        if serializer.is_valid():
+            data = {}
+            user = check_token(request.data['token'])
+            transfer = check_transfer(
+                user=user, hash=request.data['txid'], plan_id=request.data['plan'])
+
+            data['token'] = serializer.data['token']
+            data['transfer_status'] = transfer
+
+            return Response(data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

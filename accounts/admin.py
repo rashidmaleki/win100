@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.admin import DateFieldListFilter
 
 from .models import User
-from accounts.models import Payment, Transaction, Plan, Profile
+from accounts.models import Payment, Transaction, Plan, Profile, WalletAddress
 
 
 admin.site.unregister(Group)
@@ -64,3 +64,8 @@ class PlanAdmin(admin.ModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone', 'status')
+
+
+@admin.register(WalletAddress)
+class WalletAddressAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code')

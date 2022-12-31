@@ -6,6 +6,8 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from datetime import datetime
+from django.utils import timezone
+
 
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
@@ -70,14 +72,13 @@ class Payment(models.Model):
 
 class Plan(models.Model):
     name = models.CharField(max_length=50, verbose_name='نام پکیج')
-    price = models.IntegerField(verbose_name='قیمت')
+    price = models.FloatField(verbose_name='قیمت')
     daily_credit = models.IntegerField(
         default=0, verbose_name='مدت زمان اعتبار')
 
     def __str__(self) -> str:
         return self.name
 
-    
     class Meta:
         verbose_name_plural = "پکیج ها"
         verbose_name = "پکیج"
@@ -87,10 +88,11 @@ class Transaction(models.Model):
     user = models.OneToOneField(User, verbose_name=_(
         "کاربر"), on_delete=models.CASCADE, related_name='package')
     plan = models.ForeignKey(Plan, verbose_name=_(
-        "پکیج"), on_delete=models.CASCADE, related_name='plan')
+        "پکیج"), on_delete=models.CASCADE, related_name='plan', null=True)
     payment = models.ForeignKey(Payment, verbose_name=_(
-        "تراکنش"), on_delete=models.CASCADE)
-    expire_date = models.DateTimeField(verbose_name='تاریخ انقضاء')
+        "تراکنش"), on_delete=models.CASCADE, related_name='payment', null=True)
+    expire_date = models.DateTimeField(
+        verbose_name='تاریخ انقضاء', default=timezone.now, null=True)
 
     def expire_date_time(self):
         return self.expire_date.strftime('%Y/%m/%d - %H:%M')
@@ -100,11 +102,10 @@ class Transaction(models.Model):
             return True
         else:
             return False
- 
+
     class Meta:
         verbose_name_plural = "اشتراک کاربران"
         verbose_name = "اشتراک کاربر"
-    
 
 
 class Profile(models.Model):
@@ -125,3 +126,15 @@ def update_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
         Token.objects.create(user=instance)
     instance.profile.save()
+
+
+class WalletAddress(models.Model):
+    name = models.CharField(verbose_name='نام', max_length=50)
+    code = models.CharField(verbose_name='شماره حساب', max_length=100)
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "آدرس های کیف پول"
+        verbose_name = "آدرس کیف پول"
