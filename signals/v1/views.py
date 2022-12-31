@@ -7,6 +7,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from accounts.v1.functions import check_user_status
+from rest_framework.views import APIView
+import requests
 
 User = get_user_model()
 
@@ -26,3 +28,10 @@ class UserSignalViewSet(generics.ListAPIView):
 
     def post(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class CoinsViewSet(APIView):
+    def post(self, request):
+        url = 'https://api.coinranking.com/v2/coins'
+        responce = requests.get(url=url).json()
+        return Response(responce)

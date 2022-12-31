@@ -6,6 +6,7 @@ app_name = 'signals'
 
 urlpatterns = [
     path('get/', views.UserSignalViewSet.as_view()),
+    path('coins/', views.CoinsViewSet.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
