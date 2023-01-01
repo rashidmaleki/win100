@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.validators import UniqueValidator
-from accounts.models import Plan, Profile, Transaction
+from accounts.models import Plan, Profile, Transaction, WalletAddress
 
 User = get_user_model()
 
@@ -92,3 +92,9 @@ class CheckTransferSerializer(serializers.Serializer):
     token = serializers.CharField(required=True)
     txid = serializers.CharField(required=True)
     plan = serializers.CharField(required=True)
+
+
+class WalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WalletAddress
+        fields = '__all__'

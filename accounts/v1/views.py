@@ -8,8 +8,8 @@ from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from .serializers import UserSerializer, RegisterSerializer, CheckTransferSerializer
-from accounts.v1.serializers import UserSerializer, PlanSerializer, ProfileSerializerF, UserSerializerF
-from accounts.models import Plan, Profile
+from accounts.v1.serializers import UserSerializer, PlanSerializer, ProfileSerializerF, UserSerializerF, WalletSerializer
+from accounts.models import Plan, Profile, WalletAddress
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 
@@ -122,3 +122,11 @@ class CheckTransferViewSet(APIView):
 
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class WalletViewSet(generics.ListAPIView):
+    serializer_class = WalletSerializer
+    queryset = WalletAddress.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

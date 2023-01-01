@@ -7,4 +7,5 @@ urlpatterns = [
     path('login/', views.LoginUserAPIView.as_view()),
     path('profile/', views.UserProfileViewSet.as_view()),
     path('check_transfer/', views.CheckTransferViewSet.as_view()),
+    path('wallets/', views.WalletViewSet.as_view()),
 ]
