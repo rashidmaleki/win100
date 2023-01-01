@@ -75,18 +75,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         fields = ('email', 'profile', 'password')
 
-    def create(self, validated_data):
-        user = User.objects.create(
-            email=validated_data['email'],
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        if 'profile' in validated_data:
-            profile, created = Profile.objects.get_or_create(user=user)
-            profile.phone = validated_data['profile']['phone']
-            profile.save()
-        return user
-
 
 class CheckTransferSerializer(serializers.Serializer):
     token = serializers.CharField(required=True)

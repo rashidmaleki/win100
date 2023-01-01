@@ -37,7 +37,6 @@ class RegisterUserAPIView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
-        data = {}
         response = super().create(request, *args, **kwargs)
         email = response.data['email']
         user = User.objects.get(email=email)
