@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from firebase_admin import initialize_app
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'notifications',
     'django_extensions',
     'support',
+    'fcm_django',  # New
 ]
 
 MIDDLEWARE = [
@@ -151,3 +153,22 @@ REST_FRAMEWORK = {
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 SILENCED_SYSTEM_CHECKS = ["security.W019"]
+
+FIREBASE_APP = initialize_app()
+# To learn more, visit the docs here:
+# https://cloud.google.com/docs/authentication/getting-started>
+
+FCM_DJANGO_SETTINGS = {
+    # default: _('FCM Django')
+    "APP_VERBOSE_NAME": "FCM",
+    # true if you want to have only one active device per registered user at a time
+    # default: False
+    "ONE_DEVICE_PER_USER": True,
+    # devices to which notifications cannot be sent,
+    # are deleted upon receiving error response from FCM
+    # default: False
+    "DELETE_INACTIVE_DEVICES": False,
+}
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(
+    BASE_DIR, 'core', 'win100-4a3e1-firebase-adminsdk-zrk9c-980e17b003.json')

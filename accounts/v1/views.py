@@ -12,6 +12,7 @@ from accounts.v1.serializers import UserSerializer, PlanSerializer, ProfileSeria
 from accounts.models import Plan, Profile, WalletAddress
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from fcm_django.models import FCMDevice
 
 from accounts.v1.functions import check_token, check_transfer
 
@@ -79,6 +80,13 @@ class LoginUserAPIView(generics.GenericAPIView):
                 )
 
             token, created = Token.objects.get_or_create(user=user)
+            register_device, created = FCMDevice.objects.get_or_create(
+                user=user,
+                type='android'
+            )
+            register_device.registration_id = request.data['registraion_id']
+            register_device.active = True
+            register_device.save()
             return Response(
                 {
                     'Success': True,

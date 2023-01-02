@@ -2,7 +2,9 @@ from django.db import models
 from django.contrib import admin
 from django.urls import reverse
 from accounts.models import Plan
-
+from django.db.models.signals import post_save, m2m_changed
+from django.dispatch import receiver
+from notifications.v1.functions import notif_add_signal, notif_change_signal
 # Create your models here.
 
 
@@ -38,7 +40,8 @@ class Signal(models.Model):
     target5 = models.FloatField(
         blank=True, null=True, verbose_name=("تارگت پنجم"))
     lever = models.FloatField(blank=True, null=True, verbose_name=("اهرم"))
-    plan = models.ManyToManyField(Plan, verbose_name=("پکیج"))
+    plan = models.ManyToManyField(
+        Plan, verbose_name=("پکیج"), related_name='planneke')
     status = models.BooleanField(default=True, verbose_name='فعال')
     created = models.DateTimeField(
         auto_now_add=True, verbose_name='تاریخ ثبت سیگنال')
@@ -53,7 +56,7 @@ class Signal(models.Model):
 
     def get_created_date(self):
         return self.created.strftime('%Y/%m/%d - %H:%M')
-        
+
     def __str__(self) -> str:
         return f'سیگنال شماره {self.id}'
 
@@ -61,3 +64,15 @@ class Signal(models.Model):
         verbose_name_plural = "سیگنال ها"
         verbose_name = "سیگنال"
         ordering = ['-created']
+
+
+@receiver(m2m_changed, sender=Signal.plan.through)
+def add_signal(sender, instance, action, reverse, **kwargs):
+    if action == 'post_add':
+        notif_add_signal(instance)
+
+
+@receiver(post_save, sender=Signal)
+def Update_signal(sender, instance, created, **kwargs):
+    if not created:
+        notif_change_signal(instance)

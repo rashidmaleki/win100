@@ -86,11 +86,11 @@ class Plan(models.Model):
 
 class Transaction(models.Model):
     user = models.OneToOneField(User, verbose_name=_(
-        "کاربر"), on_delete=models.CASCADE, related_name='package')
+        "کاربر"), on_delete=models.CASCADE, related_name='transAsUser')
     plan = models.ForeignKey(Plan, verbose_name=_(
-        "پکیج"), on_delete=models.CASCADE, related_name='plan', null=True)
+        "پکیج"), on_delete=models.CASCADE, related_name='transAsPlan', null=True)
     payment = models.ForeignKey(Payment, verbose_name=_(
-        "تراکنش"), on_delete=models.CASCADE, related_name='payment', null=True)
+        "تراکنش"), on_delete=models.CASCADE, related_name='transAspayment', null=True)
     expire_date = models.DateTimeField(
         verbose_name='تاریخ انقضاء', default=timezone.now, null=True)
 

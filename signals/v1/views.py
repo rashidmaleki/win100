@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from accounts.v1.functions import check_user_status
 from rest_framework.views import APIView
 import requests
-
+from .functions import send_notification
 User = get_user_model()
 
 
@@ -35,3 +35,9 @@ class CoinsViewSet(APIView):
         url = 'https://api.coinranking.com/v2/coins'
         responce = requests.get(url=url).json()
         return Response(responce)
+
+
+class SendNotifViewSet(APIView):
+    def get(self, request, format=None):
+        send_notification()
+        return Response('sent')

@@ -56,8 +56,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
-    # profile = UserProfileSerializer()
-    # transaction = TransactionSerializer(many=True)
+    registraion_id = serializers.CharField(required=True)
 
 
 # Serializer to Register User
