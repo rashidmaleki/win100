@@ -23,7 +23,7 @@ class Currency(models.Model):
 class Signal(models.Model):
     currency = models.ForeignKey(Currency, verbose_name=(
         "نام ارز"), on_delete=models.CASCADE)
-    price = models.IntegerField(verbose_name=("قیمت فعلی"))
+    price = models.FloatField(verbose_name=("قیمت فعلی"))
     presentation_time = models.DateTimeField(
         verbose_name=("تاریخ و ساعت ارائه"))
     entry_point = models.FloatField(verbose_name=("نقطه ورود"))

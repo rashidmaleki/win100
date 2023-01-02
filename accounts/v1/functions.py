@@ -14,7 +14,7 @@ def check_token(token):
             {'Error': {
                 'Success': False,
                 'ErrorCode': 101,
-                'ErrorMessage': 'توکن نا معتبر است',
+                'ErrorMessage': 'The token is invalid',
             }}
         )
 
@@ -39,7 +39,7 @@ def check_user_status(token):
             {'Error': {
                 'Success': False,
                 'ErrorCode': 103,
-                'ErrorMessage': 'کاربر اشتراک ندارد',
+                'ErrorMessage': 'The user does not have a subscription',
             }}
         )
 
@@ -48,7 +48,7 @@ def check_user_status(token):
             {'Error': {
                 'Success': False,
                 'ErrorCode': 104,
-                'ErrorMessage': 'اشتراک کاربر منقضی شده است',
+                'ErrorMessage': 'User subscription has expired',
             }}
         )
 
@@ -66,7 +66,7 @@ def check_transfer(user, hash, plan_id):
             {'Error': {
                 'Success': False,
                 'ErrorCode': 109,
-                'ErrorMessage': 'ارتباط با سرور برقرار نشد',
+                'ErrorMessage': 'Could not connect to the server',
             }}
         )
 
@@ -77,7 +77,7 @@ def check_transfer(user, hash, plan_id):
             {'Error': {
                 'Success': False,
                 'ErrorCode': 108,
-                'ErrorMessage': 'هش معتبر نیست',
+                'ErrorMessage': 'The hash is not valid',
             }}
         )
 
@@ -87,7 +87,7 @@ def check_transfer(user, hash, plan_id):
             {'Error': {
                 'Success': False,
                 'ErrorCode': 110,
-                'ErrorMessage': 'کد هش تکراری است',
+                'ErrorMessage': 'The hash code is duplicated',
             }}
         )
 
@@ -98,7 +98,7 @@ def check_transfer(user, hash, plan_id):
             {'Error': {
                 'Success': False,
                 'ErrorCode': 111,
-                'ErrorMessage': 'حساب مقصد صحیح نیست',
+                'ErrorMessage': 'The destination account is not valid',
             }}
         )
 
@@ -136,6 +136,6 @@ def check_transfer(user, hash, plan_id):
             {'Error': {
                 'Success': False,
                 'ErrorCode': 107,
-                'ErrorMessage': 'مبلغ واریزی صحیح نیست',
+                'ErrorMessage': 'The deposit amount is not correct',
             }}
         )

@@ -66,7 +66,7 @@ class LoginUserAPIView(generics.GenericAPIView):
                     {
                         'Success': False,
                         'ErrorCode': 105,
-                        'ErrorMessage': 'کاربر با این آدرس ایمیل وجود ندارد',
+                        'ErrorMessage': 'There is no user with this email address',
                     }
                 )
 
@@ -75,7 +75,7 @@ class LoginUserAPIView(generics.GenericAPIView):
                     {
                         'Success': False,
                         'ErrorCode': 106,
-                        'ErrorMessage': 'پسورد اشتباه است',
+                        'ErrorMessage': 'Password incorrect',
                     }
                 )
 

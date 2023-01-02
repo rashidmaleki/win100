@@ -23,7 +23,7 @@ class PlanSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    plan = PlanSerializer()
+    # plan = PlanSerializer()
 
     class Meta:
         model = Transaction
@@ -32,7 +32,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 class UserSerializerF(serializers.ModelSerializer):
     profile = ProfileSerializerF()
-    package = TransactionSerializer()
+    package = TransactionSerializer(source='transAsUser')
 
     class Meta:
         model = User
