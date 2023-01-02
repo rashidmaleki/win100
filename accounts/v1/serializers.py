@@ -23,7 +23,7 @@ class PlanSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    # plan = PlanSerializer()
+    plan = PlanSerializer()
 
     class Meta:
         model = Transaction
