@@ -10,11 +10,13 @@ from accounts.v1.functions import check_user_status
 from rest_framework.views import APIView
 import requests
 from .functions import send_notification
+from .paginations import MyCustomPagination
 User = get_user_model()
 
 
 class UserSignalViewSet(generics.ListAPIView):
     serializer_class = SignalSerializer
+    pagination_class = MyCustomPagination
 
     def get_queryset(self):
         check_user_status(self.request.data['token'])
