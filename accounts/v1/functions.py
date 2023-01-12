@@ -109,7 +109,7 @@ def check_transfer(user, hash, plan_id):
 
     amount = amount_int / (10 ** decimals)
     plan = Plan.objects.get(id=plan_id)
-    if amount == plan.price:
+    if plan.price-1 <= amount <= plan.price+1:
         payment = Payment.objects.create(
             user=user,
             txid=hash,
